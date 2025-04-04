@@ -19,6 +19,9 @@ class Post
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $description = null;
 
+    #[ORM\Column(length: 255, nullable: true)]  // Ajout du champ username
+    private ?string $username = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -44,6 +47,19 @@ class Post
     public function setDescription(?string $description): static
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    // Getter et setter pour username
+    public function getUsername(): ?string
+    {
+        return $this->username;
+    }
+
+    public function setUsername(?string $username): static
+    {
+        $this->username = $username;
 
         return $this;
     }

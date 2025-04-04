@@ -2,17 +2,27 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\Post;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;  // Ajoute cette ligne
 
-final class PostController extends AbstractController
+class PostController extends AbstractController
 {
-    #[Route('/post', name: 'app_post')]
-    public function index(): Response
+    #[Route('/seed-posts', name: 'seed_posts')]
+    public function seed(EntityManagerInterface $em): Response
     {
-        return $this->render('post/index.html.twig', [
-            'controller_name' => 'PostController',
-        ]);
+        $post = new Post();
+        $post->setDescription('Post test');
+        $post->setImages('post1.jpg');
+        $post->setUsername('username_example');  // Exemple de nom d'utilisateur
+
+
+        $em->persist($post);
+        $em->flush();
+
+        return new Response('Post inséré en base');
     }
 }
+
