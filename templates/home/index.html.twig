@@ -4,21 +4,16 @@
 
 {% block body %}
     {% for post in posts %}
-        {% for post in posts %}
-        <div class="post-card">
-            <p>{{ post.description }}</p>
-            <img src="{{ asset('images/' ~ post.images) }}" alt="Post Image" class="post-img">
-            <span>{{ post.user.username }}</span> <!-- Affiche le nom d'utilisateur -->
-        </div>
-    {% endfor %}
-
         <div class="post-card">
             <div class="post-header">
-                <img src="{{ asset('images/user.jpg') }}" alt="pp" class="pp">
-                <span>{{ post.user.username }}</span> <!-- Affichage du nom d'utilisateur -->
+                {% set ppPath = 'images/pp/' ~ post.user.username ~ '.jpg' %}
+                <img src="{{ asset(ppPath) }}" alt="pp" class="pp" 
+                     onerror="this.onerror=null;this.src='{{ asset('images/pp/default.jpg') }}';">
+                <span>{{ post.user.username }}</span>
             </div>
             <div class="post-content">
-                <img src="{{ asset('images/' ~ post.images) }}" alt="post" class="post-img">
+                <p>{{ post.description }}</p>
+                <img src="{{ asset('uploads/posts/' ~ post.images) }}" alt="Post Image" class="post-img">
                 <div class="post-actions">
                     <i class="fa-regular fa-heart"></i>
                     <i class="fa-regular fa-comment"></i>
@@ -27,6 +22,8 @@
         </div>
     {% endfor %}
 {% endblock %}
+
+
 
 
 

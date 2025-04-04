@@ -1,34 +1,65 @@
 <?php
-
 namespace App\Controller;
 
 use App\Entity\Post;
+use App\Form\PostType;
+use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;  // Ajoute cette ligne
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class PostController extends AbstractController
 {
-    #[Route('/seed-posts', name: 'seed_posts')]
-    public function seed(EntityManagerInterface $em): Response
-    {
-        $user = $this->getUser();  // Récupère l'utilisateur connecté
+    #[Route('/new-post', name: 'post_new')]
+    #[IsGranted('ROLE_USER')]
+    public function new(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        FileUploader $fileUploader,
+        TokenStorageInterface $tokenStorage
+    ): Response {
+        // Vérifier que l'utilisateur est connecté
+        $user = $this->getUser();
+       
+        if (!$user) {
+            $this->addFlash('error', 'Vous devez être connecté pour créer un post');
+            return $this->redirectToRoute('app_login');
+        }
 
         $post = new Post();
-        $post->setDescription('Post test');
-        $post->setImages('post1.jpg');
-        $post->setUser($user);  // Associe l'utilisateur au post
+        $form = $this->createForm(PostType::class, $post);
+       
+        $form->handleRequest($request);
+       
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Gérer le téléchargement de l'image
+            $imageFile = $form->get('images')->getData();
+            if ($imageFile) {
+                $imageFileName = $fileUploader->upload($imageFile);
+                $post->setImages($imageFileName);
+            } else {
+                $post->setImages('default.jpg'); // Image par défaut si aucune n'est uploadée
+            }
 
-        $em->persist($post);
-        $em->flush();
+            // Définir l'utilisateur du post
+            $post->setUser($user);
 
-        $posts = $postRepository->findBy([], ['createdAt' => 'DESC']);
-    
-        return $this->render('home/index.html.twig', [
-            'posts' => $posts,]);
-
-        return new Response('Post inséré en base');
+            // Persister le post
+            $entityManager->persist($post);
+            $entityManager->flush();
+           
+            $this->addFlash('success', 'Post créé avec succès !');
+           
+            return $this->redirectToRoute('app_home');
+        }
+       
+        return $this->render('post/new.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 }
 

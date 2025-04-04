@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer un nouveau post{% endblock %}
+
+{% block body %}
+<div class="dark-post-creation-container">
+    <div class="dark-post-creation-card">
+        <h2 class="dark-post-creation-title">
+            <i class="fas fa-plus-square me-2"></i>Créer un nouveau post
+        </h2>
+        
+        {{ form_start(form, {'attr': {
+            'enctype': 'multipart/form-data', 
+            'class': 'dark-post-creation-form'
+        }}) }}
+        
+        <div class="form-group">
+            {{ form_label(form.description, 'Description') }}
+            {{ form_widget(form.description, {'attr': {
+                'class': 'dark-form-control', 
+                'rows': 4,
+                'placeholder': 'Partagez votre histoire...'
+            }}) }}
+            {{ form_errors(form.description) }}
+        </div>
+        
+        <div class="form-group">
+            {{ form_label(form.images, 'Télécharger une image') }}
+            <div class="image-upload-wrapper">
+                {{ form_widget(form.images, {'attr': {
+                    'class': 'dark-file-input', 
+                    'accept': 'image/*'
+                }}) }}
+                <div class="image-upload-placeholder">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <span>Glissez et déposez ou cliquez pour télécharger</span>
+                </div>
+            </div>
+            {{ form_errors(form.images) }}
+            <small class="form-text">Formats : JPEG, PNG, GIF (max 5Mo)</small>
+        </div>
+        
+        <div class="form-group">
+            <button type="submit" class="dark-btn-post">
+                <i class="fas fa-paper-plane"></i> Publier
+            </button>
+        </div>
+        
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}
