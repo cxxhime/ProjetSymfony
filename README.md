@@ -1,4 +1,4 @@
-# 💬 Frenz - Réseau Social Minimaliste
+# 💬 Frenz - Réseau Social Minimaliste (EN COURS...)
 <img width="748" alt="Capture d’écran 2025-04-04 à 23 14 40" src="https://github.com/user-attachments/assets/e510395e-76ed-4027-bc39-f1efd4975427" />
 <img width="747" alt="Capture d’écran 2025-04-04 à 23 14 56" src="https://github.com/user-attachments/assets/429218ab-1201-4556-91d5-ad3c53127935" />
 <img width="748" alt="Capture d’écran 2025-04-04 à 23 14 48" src="https://github.com/user-attachments/assets/a0ce7dba-417d-41da-a8bb-2b51b23ed2f3" />
