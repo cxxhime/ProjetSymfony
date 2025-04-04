@@ -16,7 +16,6 @@
         {% set postIndex = loop.index0 % 8 %}
         
         <div class="post-card">
-            {# En-tête du post #}
             <div class="post-header">
                 <img src="{{ asset('images/' ~ postUsers[userIndex].image) }}" 
                      alt="{{ postUsers[userIndex].name }}" 
@@ -24,28 +23,86 @@
                 <span>{{ postUsers[userIndex].name }}</span>
             </div>
 
-            {# Contenu du post #}
             <div class="post-content">
                 {% if post.description %}
                     <p class="post-description">{{ post.description }}</p>
                 {% endif %}
                 
-                {# Image du post #}
+       
                 <img src="{{ asset('images/post' ~ (postIndex + 1) ~ '.jpg') }}" 
                      alt="Post de {{ postUsers[userIndex].name }}" 
                      class="post-img"
                      onerror="this.onerror=null;this.src='{{ asset('images/post' ~ random(1,8) ~ '.jpg') }}'">
                 
-                {# Métadonnées et likes SEULEMENT #}
+        
                 <div class="post-info">
                     <span class="post-date">{{ post.createdAt|date('d/m/Y à H:i') }}</span>
+                </div>
+
+                <div class="post-actions">
                     <div class="like-section">
-                        <button class="like-button {% if app.user and post.isLikedByUser(app.user) %}liked{% endif %}" 
-                                data-post-id="{{ post.id }}">
+                        <button class="like-button {% if app.user and post.isLikedByUser(app.user) %}liked{% endif %}" data-post-id="{{ post.id }}">
                             <i class="fa-{% if app.user and post.isLikedByUser(app.user) %}solid{% else %}regular{% endif %} fa-heart"></i>
-                            <span class="likes-count">{{ post.likes|length }}</span>
                         </button>
+                        <span class="likes-count" data-post-id="{{ post.id }}">{{ post.likes|length }}</span> likes
                     </div>
+                    <div class="comment-section">
+                        <i class="fa-regular fa-comment comment-toggle" data-post-id="{{ post.id }}"></i>
+                        <span class="comments-count">{{ post.comments|length }}</span> commentaires
+                    </div>
+                </div>
+
+                {# Section commentaires - Version originale rétablie #}
+                <div class="comments-container" id="comments-{{ post.id }}">
+                    <h4>Commentaires <span class="comments-count">({{ post.comments|length }})</span></h4>
+                    
+                    {% for comment in post.comments|slice(-3) %}
+                        <div class="comment">
+                            <div class="comment-header">
+                                {% if comment.user.profilePicture %}
+                                    <img src="{{ asset('uploads/profile_pictures/' ~ comment.user.profilePicture) }}" alt="pp" class="comment-pp">
+                                {% else %}
+                                    <img src="{{ asset('images/user.jpg') }}" alt="pp" class="comment-pp">
+                                {% endif %}
+                                <span class="comment-username">{{ comment.user.username }}</span>
+                                <span class="comment-date">{{ comment.createdAt|date('d/m/Y à H:i') }}</span>
+                            </div>
+                            <div class="comment-content">
+                                <p>{{ comment.content }}</p>
+                            </div>
+                        </div>
+                    {% else %}
+                        <p class="no-comments">Aucun commentaire pour l'instant.</p>
+                    {% endfor %}
+                    
+                    {% if post.comments|length > 3 %}
+                        <button class="show-more-comments" data-post-id="{{ post.id }}">
+                            Voir les {{ post.comments|length - 3 }} commentaires précédents
+                        </button>
+                        <div class="hidden-comments" id="hidden-comments-{{ post.id }}" style="display:none;">
+                            {% for comment in post.comments|slice(0, -3) %}
+                                <div class="comment">
+                                    <div class="comment-header">
+                                        {% if comment.user.profilePicture %}
+                                            <img src="{{ asset('uploads/profile_pictures/' ~ comment.user.profilePicture) }}" alt="pp" class="comment-pp">
+                                        {% else %}
+                                            <img src="{{ asset('images/user.jpg') }}" alt="pp" class="comment-pp">
+                                        {% endif %}
+                                        <span class="comment-username">{{ comment.user.username }}</span>
+                                        <span class="comment-date">{{ comment.createdAt|date('d/m/Y à H:i') }}</span>
+                                    </div>
+                                    <div class="comment-content">
+                                        <p>{{ comment.content }}</p>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    
+                    <form action="{{ path('post_comment', {'id': post.id}) }}" method="post" class="comment-form">
+                        <input type="text" name="content" placeholder="Ajouter un commentaire..." required>
+                        <button type="submit">Envoyer</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -58,18 +115,39 @@
 {{ parent() }}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Gestion des likes seulement
-    document.querySelectorAll('.like-button').forEach(button => {
-        button.addEventListener('click', async function(e) {
+    // Toggle des commentaires
+    const commentToggles = document.querySelectorAll('.comment-toggle');
+    commentToggles.forEach(toggle => {
+        toggle.addEventListener('click', function() {
+            const postId = this.getAttribute('data-post-id');
+            const commentsContainer = document.getElementById('comments-' + postId);
+            commentsContainer.classList.toggle('show');
+        });
+    });
+    
+
+    const likeButtons = document.querySelectorAll('.like-button');
+    likeButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
-            try {
-                const response = await fetch(`/post/${this.dataset.postId}/like`, {
-                    method: 'POST',
-                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
-                });
-                const data = await response.json();
-                
+            const postId = this.getAttribute('data-post-id');
+            const url = '/post/' + postId + '/like';
+            
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Réponse du serveur:', data);
                 if (data.success) {
+                
+                    const likesCount = document.querySelector(`.likes-count[data-post-id="${postId}"]`);
+                    likesCount.textContent = data.likesCount;
+                    
+                
                     const icon = this.querySelector('i');
                     if (data.isLiked) {
                         icon.classList.replace('fa-regular', 'fa-solid');
@@ -78,11 +156,63 @@ document.addEventListener('DOMContentLoaded', function() {
                         icon.classList.replace('fa-solid', 'fa-regular');
                         this.classList.remove('liked');
                     }
-                    this.querySelector('.likes-count').textContent = data.likesCount;
+                } else {
+                    // Gérer l'erreur (par exemple, rediriger vers la page de connexion)
+                    if (data.message === 'Vous devez être connecté') {
+                        window.location.href = '/login';
+                    }
                 }
-            } catch (error) {
-                console.error('Error:', error);
-            }
+            })
+            .catch(error => {
+                console.error('Erreur lors du like:', error);
+            });
+        });
+    });
+    
+    const commentForms = document.querySelectorAll('.comment-form');
+    commentForms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            
+            fetch(this.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Réponse du serveur pour le commentaire:', data);
+                if (data.success) {
+                
+                    const noComments = this.closest('.comments-container').querySelector('.no-comments');
+                    if (noComments) {
+                        noComments.style.display = 'none';
+                    }
+                    
+                    
+                    const commentsContainer = this.closest('.comments-container');
+                    
+                
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = data.html;
+                    const newComment = tempDiv.firstChild;
+                    
+                    
+                    commentsContainer.insertBefore(newComment, this);
+                    
+                    
+                    this.reset();
+                    
+                    const commentsCount = this.closest('.post-card').querySelector('.comments-count');
+                    commentsCount.textContent = data.commentCount;
+                }
+            })
+            .catch(error => {
+                console.error('Erreur lors de l\'ajout du commentaire:', error);
+            });
         });
     });
 });
