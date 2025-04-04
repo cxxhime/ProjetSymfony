@@ -1,0 +1,12 @@
+{# templates/auth/register.html.twig #}
+
+{% block body %}
+<h2>Register</h2>
+
+{{ form_start(form) }}
+    {{ form_row(form.username) }}
+    {{ form_row(form.plainPassword) }}
+    {{ form_row(form.confirmPassword) }}
+    <button type="submit" class="btn btn-primary">Register</button>
+{{ form_end(form) }}
+{% endblock %}

@@ -3,23 +3,88 @@
 {% block title %}Fil d'actu{% endblock %}
 
 {% block body %}
+    {# Configuration des 4 utilisateurs #}
+    {% set postUsers = [
+        { name: 'Hyun', image: 'user1.jpg' },
+        { name: 'Jun', image: 'user2.jpg' },
+        { name: 'Océane', image: 'user3.jpg' },
+        { name: 'Ava', image: 'user4.jpg' }
+    ] %}
+
     {% for post in posts %}
+        {% set userIndex = loop.index0 % 4 %}
+        {% set postIndex = loop.index0 % 8 %}
+        
         <div class="post-card">
+            {# En-tête du post #}
             <div class="post-header">
-                <img src="{{ asset('images/user.jpg') }}" alt="pp" class="pp">
-                <span>{{ post.username }}</span>  <!-- Affichage du username -->
+                <img src="{{ asset('images/' ~ postUsers[userIndex].image) }}" 
+                     alt="{{ postUsers[userIndex].name }}" 
+                     class="pp">
+                <span>{{ postUsers[userIndex].name }}</span>
             </div>
-            <img src="{{ asset('images/' ~ post.images) }}" alt="post" class="post-img">
-            <div class="post-actions">
-                <i class="fa-regular fa-heart"></i>
-                <i class="fa-regular fa-comment"></i>
+
+            {# Contenu du post #}
+            <div class="post-content">
+                {% if post.description %}
+                    <p class="post-description">{{ post.description }}</p>
+                {% endif %}
+                
+                {# Image du post #}
+                <img src="{{ asset('images/post' ~ (postIndex + 1) ~ '.jpg') }}" 
+                     alt="Post de {{ postUsers[userIndex].name }}" 
+                     class="post-img"
+                     onerror="this.onerror=null;this.src='{{ asset('images/post' ~ random(1,8) ~ '.jpg') }}'">
+                
+                {# Métadonnées et likes SEULEMENT #}
+                <div class="post-info">
+                    <span class="post-date">{{ post.createdAt|date('d/m/Y à H:i') }}</span>
+                    <div class="like-section">
+                        <button class="like-button {% if app.user and post.isLikedByUser(app.user) %}liked{% endif %}" 
+                                data-post-id="{{ post.id }}">
+                            <i class="fa-{% if app.user and post.isLikedByUser(app.user) %}solid{% else %}regular{% endif %} fa-heart"></i>
+                            <span class="likes-count">{{ post.likes|length }}</span>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
+    {% else %}
+        <p>Aucun post à afficher.</p>
     {% endfor %}
 {% endblock %}
 
-
-
-
-
-
+{% block javascripts %}
+{{ parent() }}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Gestion des likes seulement
+    document.querySelectorAll('.like-button').forEach(button => {
+        button.addEventListener('click', async function(e) {
+            e.preventDefault();
+            try {
+                const response = await fetch(`/post/${this.dataset.postId}/like`, {
+                    method: 'POST',
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                });
+                const data = await response.json();
+                
+                if (data.success) {
+                    const icon = this.querySelector('i');
+                    if (data.isLiked) {
+                        icon.classList.replace('fa-regular', 'fa-solid');
+                        this.classList.add('liked');
+                    } else {
+                        icon.classList.replace('fa-solid', 'fa-regular');
+                        this.classList.remove('liked');
+                    }
+                    this.querySelector('.likes-count').textContent = data.likesCount;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

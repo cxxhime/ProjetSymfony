@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Login{% endblock %}
+
+{% block body %}
+    <div class="login-container">
+        <h2 class="login-title">Login</h2>
+        {{ form_start(form, {'attr': {'class': 'login-form'}}) }}
+            <div class="form-group">
+                {{ form_row(form.username, {'attr': {'class': 'input-field', 'placeholder': 'Enter your username'}}) }}
+            </div>
+            <div class="form-group">
+                {{ form_row(form.password, {'attr': {'class': 'input-field', 'placeholder': 'Enter your password'}}) }}
+            </div>
+            <button type="submit" class="btn-submit">Login</button>
+        {{ form_end(form) }}
+        
+        <div class="register-link">
+            <a href="{{ path('app_register') }}">Create an account</a>
+        </div>
+    </div>
+    
+{% endblock %}
+
+

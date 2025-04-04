@@ -1,0 +1,15 @@
+{# templates/comment/_comment.html.twig #}
+<div class="comment">
+    <div class="comment-header">
+        {% if comment.user.profilePicture %}
+            <img src="{{ asset('uploads/profile_pictures/' ~ comment.user.profilePicture) }}" alt="pp" class="comment-pp">
+        {% else %}
+            <img src="{{ asset('images/user.jpg') }}" alt="pp" class="comment-pp">
+        {% endif %}
+        <span class="comment-username">{{ comment.user.username }}</span>
+        <span class="comment-date">{{ comment.createdAt|date('d/m/Y à H:i') }}</span>
+    </div>
+    <div class="comment-content">
+        <p>{{ comment.content }}</p>
+    </div>
+</div>

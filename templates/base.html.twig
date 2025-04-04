@@ -2,29 +2,47 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Insta-Style MYM{% endblock %}</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <title>{% block title %}Frenz{% endblock %}</title>
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
     <div class="insta-container">
         <aside class="sidebar">
-            <h1 class="logo">mym</h1>
+            <h1 class="logo">Frenz</h1>
             <nav>
                 <ul>
-                    <li><i class="fas fa-home"></i></li>
-                    <li><i class="fas fa-comment-dots"></i></li>
-                    <li><i class="fas fa-search"></i></li>
-                    <li><i class="fas fa-bookmark"></i></li>
-                    <li><i class="fas fa-bell"></i></li>
-                    <li><i class="fas fa-user"></i></li>
+                    <li><i class="fas fa-home"></i> Home page</li>
+                    <li><i class="fas fa-comment-dots"></i> Messages</li>
+                    <li><i class="fas fa-search"></i> Search</li>
+                    <li><i class="fas fa-bookmark"></i> Bookmarks</li>
+                    <li><i class="fas fa-ellipsis-h"></i> Others</li>
+                    <li><i class="fas fa-user"></i> Account</li>
                 </ul>
             </nav>
+            
+            <div class="footer">
+                <a href="#">Help & Contact</a>
+                <a href="#">About</a>
+                <a href="#">Blog</a>
+                <a href="#">Cookies</a>
+                <a href="#">Legal notice</a>
+                <a href="#">General terms and conditions of use</a>
+                <a href="#">Cancel items and conditions of sale</a>
+                <a href="#">Child protection</a>
+                <a href="#">Anti-allowed policy</a>
+                <a href="#">Content policy</a>
+                <a href="#">Report Content</a>
+                <a href="#">Privacy</a>
+            </div>
         </aside>
 
         <main class="feed">
             {% block body %}{% endblock %}
         </main>
     </div>
+    
+    {% block javascripts %}{% endblock %}
 </body>
 </html>

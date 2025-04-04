@@ -1,101 +1,9 @@
+/* Thème sombre Frenz */
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background-color: #0f0f0f;
-    color: #fff;
-}
-
-.container {
-    display: flex;
-}
-
-.sidebar {
-    width: 250px;
-    background-color: #111;
-    padding: 20px;
-    min-height: 100vh;
-}
-
-.sidebar .logo {
-    font-size: 28px;
-    font-weight: bold;
-    margin-bottom: 20px;
-}
-
-.sidebar ul {
-    list-style: none;
-    padding: 0;
-}
-
-.sidebar li {
-    margin: 15px 0;
-    cursor: pointer;
-}
-
-.content {
-    flex: 1;
-    padding: 30px;
-}
-
-.promo {
-    background-color: #1e1e1e;
-    padding: 20px;
-    border-radius: 10px;
-    margin-bottom: 30px;
-}
-
-.banner {
-    font-weight: bold;
-    margin-bottom: 10px;
-    color: orange;
-}
-
-.tabs {
-    margin-bottom: 20px;
-}
-
-.tabs button {
-    padding: 10px 20px;
-    margin-right: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    background-color: #2e2e2e;
-    color: white;
-}
-
-.tabs .active {
-    background-color: #007bff;
-}
-
-.post {
-    position: relative;
-    max-width: 400px;
-}
-
-.post img {
-    width: 100%;
-    border-radius: 10px;
-}
-
-.follow {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background-color: #007bff;
-    border: none;
-    color: white;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #000;
-    color: #fff;
+    background-color: #0a0a0a;
+    color: #e1e1e1;
 }
 
 .insta-container {
@@ -103,19 +11,21 @@ body {
     min-height: 100vh;
 }
 
+/* Sidebar style */
 .sidebar {
-    width: 80px;
+    width: 245px;
+    padding: 20px;
+    border-right: 1px solid #333;
     background-color: #111;
-    padding: 20px 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    position: fixed;
+    height: 100%;
 }
 
-.logo {
-    font-size: 20px;
+.sidebar .logo {
+    font-size: 24px;
     font-weight: bold;
-    margin-bottom: 20px;
+    margin: 25px 0 35px 10px;
+    color: #3d7e3e; 
 }
 
 .sidebar ul {
@@ -125,67 +35,238 @@ body {
 }
 
 .sidebar li {
-    margin: 20px 0;
-    font-size: 20px;
-    color: #888;
+    margin: 15px 0;
+    padding: 10px;
+    font-size: 16px;
     cursor: pointer;
+    border-radius: 8px;
+    color: #e1e1e1;
 }
 
 .sidebar li:hover {
-    color: #fff;
+    background-color: #222;
 }
 
+.sidebar li i {
+    margin-right: 12px;
+    width: 20px;
+    text-align: center;
+    color: #3d7e3e;
+}
+
+/* Main content */
 .feed {
     flex: 1;
     padding: 30px;
-    max-width: 600px;
-    margin: 0 auto;
+    margin-left: 285px;
+    max-width: 615px;
 }
 
+/* User header */
+.user-header {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #111;
+    border-radius: 8px;
+    border: 1px solid #333;
+}
+
+.user-header h2 {
+    margin: 0;
+    font-size: 18px;
+    color: #3d7e3e; 
+}
+
+.user-header p {
+    margin: 5px 0 0;
+    font-size: 14px;
+    color: #888;
+}
+
+/* Post card */
 .post-card {
-    background-color: #1a1a1a;
-    border-radius: 10px;
+    background-color: #111;
+    border-radius: 8px;
     margin-bottom: 30px;
+    border: 1px solid #333;
     overflow: hidden;
 }
 
 .post-header {
     display: flex;
     align-items: center;
-    padding: 15px;
+    padding: 14px 16px;
+    border-bottom: 1px solid #333;
 }
 
 .post-header .pp {
-    width: 40px;
-    height: 40px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
-    margin-right: 10px;
+    margin-right: 12px;
     object-fit: cover;
+    border: 2px solid #3d7e3e; 
+}
+
+.post-header span {
+    font-weight: 600;
+    font-size: 14px;
+    color: #4CAF50; 
+}
+
+.post-content {
+    padding: 0;
+}
+
+.post-description {
+    padding: 15px 16px;
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.4;
+    color: #e1e1e1;
 }
 
 .post-img {
     width: 100%;
     display: block;
+    border-top: 1px solid #333;
+    border-bottom: 1px solid #333;
+}
+
+.post-info {
+    padding: 0 16px;
+    font-size: 12px;
+    color: #888;
+    border-bottom: 1px solid #333;
 }
 
 .post-actions {
-    padding: 10px 15px;
-    font-size: 20px;
+    display: flex;
+    padding: 6px 16px;
+    border-bottom: 1px solid #333;
 }
 
-.post-actions i {
-    margin-right: 15px;
-    cursor: pointer;
-}
-
-.caption {
-    padding: 0 15px 15px;
+.like-section, .comment-section {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
     font-size: 14px;
 }
 
-.post-img {
-    width: 100%;
-    height: 500px; /* taille uniforme pour tout le monde */
+.like-button, .comment-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    font-size: 24px;
+    color: #3d7e3e; 
+    margin-right: 5px;
+}
+
+.like-button.liked i {
+    color: #ff4c67; 
+}
+
+.comments-container {
+    padding: 0 16px;
+    background-color: #0a0a0a;
+}
+
+.comment {
+    padding: 12px 0;
+    border-bottom: 1px solid #333;
+    font-size: 14px;
+}
+
+.comment-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.comment-pp {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 12px;
     object-fit: cover;
+    border: 1px solid #3d7e3e; 
+}
+
+.comment-username {
+    font-weight: 600;
+    margin-right: 10px;
+    color: #3d7e3e; 
+}
+
+.comment-date {
+    font-size: 12px;
+    color: #888;
+}
+
+.comment-content {
+    margin-left: 42px;
+    color: #e1e1e1;
+}
+
+.no-comments {
+    text-align: center;
+    color: #888;
+    font-style: italic;
+    padding: 15px 0;
+    font-size: 14px;
+}
+
+.comment-form {
+    display: flex;
+    padding: 16px 0;
+    border-top: 1px solid #333;
+    margin-top: 10px;
+}
+
+.comment-form input {
+    flex: 1;
+    border: 1px solid #333;
+    border-radius: 22px;
+    padding: 8px 16px;
+    font-size: 14px;
+    outline: none;
+    background-color: #201f1f;
+    color: #e1e1e1;
+}
+
+.comment-form button {
+    background-color: #3d7e3e; 
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    margin-left: 10px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* Footer */
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 245px;
+    padding: 20px;
+    font-size: 11px;
+    color: #888;
+    line-height: 1.4;
+    background-color: #201f1f;
+}
+
+.footer a {
+    color: #3d7e3e; 
+    text-decoration: none;
     display: block;
+    margin: 3px 0;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+    color: #3d7e3e;
 }
