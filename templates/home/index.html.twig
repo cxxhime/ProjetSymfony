@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Fil d'actu{% endblock %}
+
+{% block body %}
+    {% for post in posts %}
+        <div class="post-card">
+            <div class="post-header">
+                <img src="{{ asset(post.pp) }}" alt="pp" class="pp">
+                <span>{{ post.username }}</span>
+            </div>
+            <img src="{{ asset(post.image) }}" alt="post" class="post-img">
+            <div class="post-actions">
+                <i class="fa-regular fa-heart"></i>
+                <i class="fa-regular fa-comment"></i>
+                <i class="fa-regular fa-paper-plane"></i>
+            </div>
+            <p class="caption"><strong>{{ post.username }}</strong> {{ post.caption }}</p>
+        </div>
+    {% endfor %}
+{% endblock %}
+
+
+
